@@ -1,4 +1,10 @@
-<?php require_once('includes/conn.php'); ?>
+<?php 
+require_once('config.php'); 
+include($CLASS_CATALOG);
+
+$catalog=new Catalog;
+$item=$catalog->fetchLatest('*','book','Date_Added','DESC');
+?>
 <html lang="en">
 	<head>
 	  <title>Online Library</title>
@@ -18,9 +24,10 @@
     <div>
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
+        <li><a href="#">Titles</a></li>
+        <li><a href="#">Authors</a></li> 
+        <li><a href="#">Publishers</a></li>
+        <li><a href="#">Geners</a></li> 
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <?php if (isset($_SESSION['lib'])) { 
@@ -33,6 +40,21 @@
 		<div class="img-head"> 
 			<img class="img-responsive" src="assets/head.jpg">
 		</div>
+<!--------------------------------END OF HEADER------------------------------------------!-->
+
+<div class="container">
+    <div id="legend">
+      <legend class="ctitle">Latest Arrivals</legend>
+      </div> 
+      <div class="row">
+      <?php
+      foreach($item as $book)	
+      echo '<div class="col-sm-4">
+      <img src="'.$book['Book_Cover'].'"class="img-thumbnail" alt="'.$book['Book_Title'].'" width="150" height="150"> 
+      </div>';
+      ?>
+      </div>
+
 	</body>
 
 </html>

@@ -1,5 +1,7 @@
 <?php 
-require ('../includes/conn.php');
+require ('../config.php');
+require ($CLASS_CONNECTION);
+
 
 class LibAdmin {
 	

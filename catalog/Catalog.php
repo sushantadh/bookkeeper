@@ -1,34 +1,24 @@
 <?php
-include ('../includes/conn.php');
-class catalog {
+include ($CLASS_CONNECTION);
+class Catalog {
 	
-
-
-	public function fetchByField ($field,$arg) {
-
-		global $pdo;
-
-		if(!empty($field)&&!empty($arg)) {
-
-                        $query=$pdo->prepare("SELECT * FROM book WHERE $field='$arg'");
-                 
-                        if($query->execute()) {
-                        	$item=$query->fetchAll();
-                        	if ($item) {
-                        		foreach ($item as $book) {
-                        			echo $book['Book_Title'];
-                        		 }
-                        		}   
-                        		
-                        	else {
-                        		echo 'No results found';
-                        	}
-                        	}
-                        	else {
-                        		echo 'error excecuting query';
-                        	}
-                        }
-                    }
+    public function fetchByField ($tfield,$table,$field,$arg) {
+        global $pdo;
+        if(!empty($tfield)&&!empty($table)&&!empty($field)&&!empty($arg)) {
+            $query=$pdo->prepare("SELECT $tfield FROM $table WHERE $field='$arg'");
+            if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1;
+                }
+            }
+        } else {
+            return 2;
+        } }
+         
+    
 
     public function fetchById ($arg) {
 
@@ -55,8 +45,23 @@ class catalog {
                     }
 
 
-
-
+    public function fetchLatest($tfield,$table,$sfield,$arg) {
+        global $pdo;
+        if(!empty($tfield)&&!empty($table)&&!empty($sfield)&&!empty($arg)) {
+            $query=$pdo->prepare("SELECT $tfield FROM $table ORDER BY $sfield $arg LIMIT 3");
+            if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1;
                 }
+            }
+        } else {
+            return 2;
+        } 
+
+    }
+} 
 
 ?>

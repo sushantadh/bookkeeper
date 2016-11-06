@@ -1,0 +1,15 @@
+<?php
+$DB_HOST="localhost";
+$DB_NAME="library";
+$DB_USERNAME="root";
+$DB_PASSWORD='';
+$PROJECT_ROOT="C:/xampp/htdocs/library/";
+$CLASS_ADMIN=$PROJECT_ROOT."admin/admin.php";
+$CLASS_CATALOG=$PROJECT_ROOT."catalog/Catalog.php";
+$CLASS_ADMIN=$PROJECT_ROOT."admin/admin.php";
+$CLASS_CONNECTION=$PROJECT_ROOT."includes/conn.php";
+$CLASS_FUNCTIONS=$PROJECT_ROOT."includes/functions.php";
+$CLASS_LIBRARIAN=$PROJECT_ROOT."librarian/Librarian.php";
+$CLASS_MEMBER=$PROJECT_ROOT."member/member.php";
+$CLASS_LIBRARIAN=$PROJECT_ROOT."librarian/Librarian.php";
+?>

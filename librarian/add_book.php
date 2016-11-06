@@ -9,7 +9,7 @@
        $btitle=$_POST['btitle'];
        $bauthor=$_POST['bauthor'];
        $bpublisher=$_POST['bpublisher'];
-       $date=$_POST['pdate'];
+       $pdate=$_POST['pdate'];
        $bgenere=$_POST['bgenere'];
        $bcount=$_POST['bcount'];
        $bdic=$_POST['bdic'];
