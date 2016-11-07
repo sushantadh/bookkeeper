@@ -1,5 +1,5 @@
 <?php
-require ('../includes/conn.php');
+require ($CLASS_CONNECTION);
 
 class Librarian {
 
@@ -173,10 +173,11 @@ class Librarian {
 
   public function issueBook($requestId,$userId,$bookId) {
     $bookCount=$this->checkBookCount($bookId);
-    echo '<br>Book count '. $bookCount;
+    // echo '<br>Book count '. $bookCount;
         
     if($bookCount<=0) {
-      echo 'Book not avilable';
+      // echo 'Book not avilable';
+      return 1;
       $borrowCount=$this->getBorrowCount($userId);
 
       $newBorrowCount=(int)$borrowCount-1;
@@ -198,6 +199,8 @@ class Librarian {
           $newBookCount=0;
         }
         $updateBookCount=$this->updateBookCount($bookId,$newBookCount);
+        return 0;
+        //successful
       }
     } 
 
@@ -216,7 +219,55 @@ class Librarian {
       $newBorrowCount=0;
     }
 
-    $decBorrow=$this->decreaseBorrowCount($userId, $newBorrowCount); }
-
+    $decBorrow=$this->decreaseBorrowCount($userId, $newBorrowCount); 
+    return 0;
   }
+
+  public function fetchByField ($tfield,$table,$field,$arg) {
+        global $pdo;
+        if(!empty($tfield)&&!empty($table)&&!empty($field)&&!empty($arg)) {
+            $query=$pdo->prepare("SELECT $tfield FROM $table WHERE $field='$arg'");
+            if($query->execute()) {
+                $item=$query->fetch();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1;
+                }
+            }
+        } else {
+            return 2;
+        } }
+
+  public function fetchRequests() {
+    global $pdo;
+    $sql = "SELECT BR.Request_Id,BR.R_User,BR.R_Book,B.Book_Title,U.User_Fname FROM book_request BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Requested_Date ASC";
+     $query=$pdo->prepare($sql);
+
+     if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1; //no item
+                }
+            } 
+          }
+
+  public function fetchReturn() {
+    global $pdo;
+    $sql = "SELECT BR.Return_Id,BR.R_User,BR.R_Book,B.Book_Title,U.User_Fname FROM book_return BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Return_Date ASC";
+     $query=$pdo->prepare($sql);
+
+     if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1; //no item
+                }
+            } 
+          }
+
+}
 ?>

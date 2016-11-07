@@ -1,5 +1,6 @@
 <?php
-  include ('includes/functions.php');
+  require_once('config.php'); 
+include($CLASS_FUNCTIONS);
   $functions=new Functions;
 
   if(isset($_POST['e-mail'])&&isset($_POST['pswd']))
@@ -12,11 +13,11 @@
          if($_SESSION['lib'][1]==1) {
             header('Location:admin/index.php?id='.$_SESSION['lib'][0]);
          }
-         else if ($_SESSION['lib'][1]=2) {
+         else if ($_SESSION['lib'][1]==2) {
             header('Location:librarian/index.php?id='.$_SESSION['lib'][0]);
          }
 
-         else if ($_SESSION['lib'][1]=3) {
+         else if ($_SESSION['lib'][1]==3) {
             header('Location:member/index.php?id='.$_SESSION['lib'][0]);
          }
         }

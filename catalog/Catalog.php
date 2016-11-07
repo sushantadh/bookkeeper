@@ -31,7 +31,7 @@ class Catalog {
                         if($query->execute()) {
                         	$item=$query->fetch();
                         	if ($item) {
-                           			echo $item['Book_Title'];
+                           			return $item;
                         	            		}   
                         		
                         	else {

@@ -1,3 +1,24 @@
+<?php 
+require('../config.php');
+include($CLASS_LIBRARIAN);
+$librarian=new Librarian;
+
+$id=$_SESSION['lib'][0];
+  $getname=$admin->fetchByField ('User_Fname','user','User_Id',$id);
+  $name=$getname['User_Fname'];
+  
+$requests=$librarian->fetchRequests();
+$return_data=$librarian->fetchReturn();
+
+if(isset($_GET['issue'])) {
+  $issue=$_GET['issue'];
+}
+
+if(isset($_GET['return'])) {
+  $return=$_GET['return'];
+}
+?>
+
 <html lang="en">
     <head>
     <title>Online Library - Librarian</title>
@@ -34,9 +55,111 @@
 <!-- --------------------END OF HEADER ----------------------------------- !-->
 
     <div class="container">
+    <div id="legend">
+      <legend class="ctitle"><?php echo 'Welcome '.$name; ?></legend>
+      </div> 
+
+      <?php
+        if (isset($issue) and $issue==1) {
+          echo '<div class="alert alert-warning fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong><span class="glyphicon glyphicon-info-sign"></span> Book not avilable !</strong></div> '; }
+
+        else if (isset($issue) and $issue==0) {
+          echo '<div class="alert alert-success fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong><span class="glyphicon glyphicon-ok-sign"></span> Book Issued !</strong></div> '; }
+      ?>
+
+      <?php
+        if (isset($return) and $return==1) {
+          echo '<div class="alert alert-warning fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong><span class="glyphicon glyphicon-info-sign"></span> Return not successful </strong></div> '; }
+
+        else if (isset($return) and $return==0) {
+          echo '<div class="alert alert-success fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong><span class="glyphicon glyphicon-ok-sign"></span> Return Successful </strong></div> '; }
+      ?>
+
+     <div class="col-md-3"> 
+  <ul class="nav nav-pills nav-stacked">
+  <li class="active"><a data-toggle="tab" href="#borrow">Borrow Requests</a></li>
+  <li><a data-toggle="tab" href="#return">Return Requests</a></li>
+</ul>
+</div>
+
+<div class="col-md-9"> 
+<div class="tab-content">
+  <div id="borrow" class="tab-pane fade in active">
+    <h3>Borrow Requests</h3>
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Member Id</th>
+        <th>Member Name</th>
+        <th>Book Title</th>
+        <th>Approve</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    if ($requests==1) {
+      echo '<tr><td>No Requests </td></tr>';
+    }
+    else{
+    foreach($requests as $item) {
+      echo'<tr>
+      <td>'.$item['R_User'].'</td> 
+      <td>'.$item['User_Fname'] .'</td>
+      <td>'.$item['Book_Title'].'</td>
+      <td> <a href="../librarian/returnBook.php?rid='.$item['Return_Id'].'&uid='.$item['R_User'].'&bid='.$item['R_Book'].'&id='.$id.'"><button type="button" class="btn btn-default btn-md">Return Book</button></a></td>
+      </tr>';
+    }
+  }
+
+     ?>
+    </tbody>
+    </table>
+  </div>
+  <div id="return" class="tab-pane fade">
+    <h3>Return Requests</h3>
+    
+        <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Member Id</th>
+        <th>Member Name</th>
+        <th>Book Title</th>
+        <th>Approve</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    if ($return_data==1) {
+      echo '<tr><td>No Requests </td></tr>';
+    }
+    else{
+    foreach($return_data as $ritem) {
+      echo'<tr>
+      <td>'.$ritem['R_User'].'</td> 
+      <td>'.$ritem['User_Fname'] .'</td>
+      <td>'.$ritem['Book_Title'].'</td>
+      <td> <a href="../librarian/returnBook.php?rid='.$ritem['Return_Id'].'&uid='.$ritem['R_User'].'&bid='.$ritem['R_Book'].'&id='.$id.'"><button type="button" class="btn btn-default btn-md">Return Book</button></a></td>
+      </tr>';
+    }
+  }
+
+     ?>
+    </tbody>
+    </table>
+
+  </div>
+</div>
+
     </div>
-      <div class="col-sm-4">
-      </div>
     </div>
+    <br/><br/><br/><br/>
   </body>
   </html>

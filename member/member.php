@@ -1,5 +1,5 @@
 <?php
-require ('../includes/conn.php');
+require ($CLASS_CONNECTION);
 
 class Member {
 	
@@ -71,45 +71,75 @@ class Member {
     $query=$pdo->prepare("INSERT INTO book_return VALUES ('','$userId','$bookId','$timestamp')");
           
     if ($query->execute()) {
-      echo'<br>return request granted';  
+      return 0;  
       } 
       
     else {
-      print_r($query->errorInfo());
+      return 1;
       }
     }
   
   public function requestBook($userId,$bookId) {
     $borrow_count=$this->checkLimit($userId);
-    echo '<br>borrow count '. $borrow_count;
 
     if($borrow_count<3) {
       $borrow_count_new=(int)$borrow_count+1;
-      echo '<br> new b count' .$borrow_count_new;
       $grant=$this->grantRequest($userId,$bookId);
 
       if($grant==0) {
         $updateBorrowCount=$this->updateBorrowCount($userId,$borrow_count_new);
 
         if($updateBorrowCount==0) {
-          echo 'requested!';
+          return 0; //success
         }
       }
     }
     else {
-      echo 'Borrow count exceeded.';
+      return 1; //borrow count exceeded
     } } 
 
   public function returnBook($borrowId,$userId,$bookId) {
     $delete=$this->deleteFromBorrowed($borrowId);
     $timestamp=time();
     $returnReq=$this->returnReq($userId,$bookId,$timestamp);
+    if($returnReq==0) {
+      return 0;
+    }
+    else if($returnReq==1) {
+      return 1;
+    } }
 
 
-  }
+  public function fetchByField ($tfield,$table,$field,$arg) {
+        global $pdo;
+        if(!empty($tfield)&&!empty($table)&&!empty($field)&&!empty($arg)) {
+            $query=$pdo->prepare("SELECT $tfield FROM $table WHERE $field='$arg'");
+            if($query->execute()) {
+                $item=$query->fetch();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1;
+                }
+            }
+        } else {
+            return 2;
+        } }
 
+  public function fetchBorrow($id) {
+    global $pdo;
+    $sql = "SELECT BR.Borrow_Id,BR.B_User,BR.B_Book,B.Book_Title FROM book_borrowed BR,book B WHERE BR.B_Book=B.Book_Id AND BR.B_User='$id'";
+     $query=$pdo->prepare($sql);
 
-
+     if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1; //no item
+                }
+            } 
+          }
 
 
   }

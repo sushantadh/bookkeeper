@@ -3,7 +3,7 @@ require_once('config.php');
 include($CLASS_CATALOG);
 
 $catalog=new Catalog;
-$item=$catalog->fetchLatest('*','book','Date_Added','DESC');
+$item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added','DESC');
 ?>
 <html lang="en">
 	<head>
@@ -49,12 +49,11 @@ $item=$catalog->fetchLatest('*','book','Date_Added','DESC');
       <div class="row">
       <?php
       foreach($item as $book)	
-      echo '<div class="col-sm-4">
-      <img src="'.$book['Book_Cover'].'"class="img-thumbnail" alt="'.$book['Book_Title'].'" width="150" height="150"> 
+      echo '<div class="col-sm-4"><a href="catalog/book.php?id='.$book['Book_Id'].'">
+      <img src="'.$book['Book_Cover'].'"class="img-thumbnail" alt="'.$book['Book_Title'].'" width="150" height="150"></a> 
       </div>';
       ?>
       </div>
-
 	</body>
 
 </html>

@@ -1,6 +1,7 @@
 <?php
-  include ('Librarian.php');
-  include('../includes/functions.php');
+require_once('../config.php'); 
+include($CLASS_LIBRARIAN);
+include($CLASS_FUNCTIONS);
   $Librarian=new Librarian;
   $Function=new Functions;
 

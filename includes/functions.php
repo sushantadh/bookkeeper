@@ -1,6 +1,6 @@
 <?php 
 
-require ('conn.php');
+include ($CLASS_CONNECTION);
 
 class Functions {
 	
