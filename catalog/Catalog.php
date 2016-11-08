@@ -2,6 +2,22 @@
 include ($CLASS_CONNECTION);
 class Catalog {
 	
+    public function fetchField($tfield,$table) {
+        global $pdo;
+        if(!empty($tfield)&&!empty($table)) {
+            $query=$pdo->prepare("SELECT DISTINCT $tfield FROM $table");
+            if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1;
+                }
+            }
+        } else {
+            return 2;
+        } }
+
     public function fetchByField ($tfield,$table,$field,$arg) {
         global $pdo;
         if(!empty($tfield)&&!empty($table)&&!empty($field)&&!empty($arg)) {

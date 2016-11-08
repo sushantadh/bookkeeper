@@ -43,12 +43,16 @@ include($CLASS_FUNCTIONS);
     <div>
       <ul class="nav navbar-nav">
         <li><a href="index.php">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
+        <li><a href="titles.php">Titles</a></li>
+        <li><a href="authors.php">Authors</a></li> 
+        <li><a href="publishers.php">Publishers</a></li>
+        <li><a href="generes.php">Geners</a></li> 
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <?php if (isset($_SESSION['lib'])) { 
+            echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
       </ul>
     </div>
   </div>

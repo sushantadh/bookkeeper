@@ -3,7 +3,7 @@ require_once('config.php');
 include($CLASS_CATALOG);
 
 $catalog=new Catalog;
-$item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added','DESC');
+$item=$catalog->fetchField("Book_Id,Book_Title",'book');
 ?>
 <html lang="en">
 	<head>
@@ -21,19 +21,19 @@ $item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added',
 
 		<nav class="navbar navbar-default">
   <div class="container-fluid">
-    <div>
+   <div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="titles.php">Titles</a></li>
+        <li><a href="index.php">Home</a></li>
+        <li class="active"><a href="titles.php">Titles</a></li>
         <li><a href="authors.php">Authors</a></li> 
         <li><a href="publishers.php">Publishers</a></li>
         <li><a href="generes.php">Geners</a></li> 
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <?php if (isset($_SESSION['lib'])) { 
-      			echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
-      			else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
       </ul>
     </div>
   </div>
@@ -45,16 +45,20 @@ $item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added',
 
 <div class="container">
     <div id="legend">
-      <legend class="ctitle">Latest Arrivals</legend>
+      <legend class="ctitle">Avilable Titles</legend>
       </div> 
       <div class="row">
       <?php
       foreach($item as $book)	
-      echo '<div class="col-sm-4"><a href="catalog/book.php?id='.$book['Book_Id'].'">
-      <img src="'.$book['Book_Cover'].'"class="img-thumbnail" alt="'.$book['Book_Title'].'" width="150" height="150"></a> 
-      </div>';
+      echo '<h3><p><a href="catalog/book.php?id='.$book['Book_Id'].'">'.$book['Book_Title'].'</a> 
+      </p></h3>';
       ?>
       </div>
-	</body>
+      </div>
+	   
+     <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
+  </body>
 
 </html>

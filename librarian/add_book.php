@@ -5,6 +5,8 @@ include($CLASS_FUNCTIONS);
   $Librarian=new Librarian;
   $Function=new Functions;
 
+  $loggedin=$Librarian->isLoggedIn();
+
   if(isset($_POST['btitle'])&&isset($_POST['bauthor'])&&isset($_POST['bpublisher'])&&isset($_POST['pdate'])&&isset($_POST['bgenere'])&&isset($_POST['bcount'])&&isset($_POST['bdic'])&&isset($_FILES['file']))
     { 
        $btitle=$_POST['btitle'];
@@ -63,28 +65,21 @@ include($CLASS_FUNCTIONS);
   <body>
     <div class="page-header myhead"><Center>ONLINE LIBRARY</Center></div>
 
-    <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div>
-      <ul class="nav navbar-nav">
-        <li><a href="../index.php">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Add User</a></li>
-        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <?php $Librarian->nav(); ?>
     <div class="img-head"> 
       <img class="img-responsive" src="../assets/head.jpg">
     </div>
 <!-- --------------------END OF HEADER ----------------------------------- !-->
 
     <div class="container">
+        <?php if ($loggedin==0) {
+      echo'<div id="legend">
+      <legend class="ctitle">Please Login as Librarian</legend>
+      </div><div></div><div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>'; 
+    die();
+    } ?>
     <!-- <div class="ctitle">USER SIGN UP</div>  -->
     <div id="legend">
       <legend class="ctitle">ADD A BOOK</legend>
@@ -186,5 +181,8 @@ include($CLASS_FUNCTIONS);
 </form>
 </div>
 </div>
+  <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
   </body>
   </html>

@@ -40,16 +40,17 @@ if(isset($_GET['req'])) {
   <div class="container-fluid">
     <div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Titles</a></li>
-        <li><a href="#">Authors</a></li> 
-        <li><a href="#">Publishers</a></li>
-        <li><a href="#">Geners</a></li> 
+        <li><a href="../index.php">Home</a></li>
+        <li><a href="../titles.php">Titles</a></li>
+        <li><a href="../authors.php">Authors</a></li> 
+        <li><a href="../publishers.php">Publishers</a></li>
+        <li><a href="../generes.php">Geners</a></li> 
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <?php if (isset($_SESSION['lib'])) { 
-      			echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
-      			else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
+            echo '<li><a href="../redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
+            else echo '<li><a href="../login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
       </ul>
     </div>
   </div>
@@ -97,11 +98,13 @@ if(isset($_GET['req'])) {
       <div class="row"><p><strong>Genere: </strong><?php echo $genere; ?> </p></div> 
       <div class="row"><p><strong>Discription: </strong></div>
       <div class="row well"><p><?php echo $discription;?></p></div> 
-      
-
       </div>
+    </div>
 
-      </div>
+    <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
+    
 	</body>
 
 </html>

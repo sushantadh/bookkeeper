@@ -4,8 +4,10 @@ include($CLASS_ADMIN);
 
 $admin=new LibAdmin;
 
-$id=$_GET['id'];
+$uid=$_SESSION['lib'][0];
+$id=$_GET['uid'];
 
 $delete=$admin->deleteUser($id);
-header('Location:index.php?id='.$id.'&return='.$delete);
+echo $delete;
+header('Location:index.php?id='.$uid.'&return='.$delete);
 ?>

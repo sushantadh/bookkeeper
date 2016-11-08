@@ -269,5 +269,48 @@ class Librarian {
             } 
           }
 
+  public function nav() {
+    if($this->isLoggedIn()==1) {
+
+      echo'<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="../index.php">Home</a></li>
+        <li><a href="../titles.php">Titles</a></li>
+        <li><a href="../authors.php">Authors</a></li> 
+        <li><a href="../publishers.php">Publishers</a></li>
+        <li><a href="../generes.php">Geners</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="index.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+        <li><a href="add_book.php"><span class="glyphicon glyphicon-book"></span> Add Book</a></li>
+        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>';
+    }
+
+    else {
+        echo'<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="../index.php">Home</a></li>
+        <li><a href="../titles.php">Titles</a></li>
+        <li><a href="../authors.php">Authors</a></li> 
+        <li><a href="../publishers.php">Publishers</a></li>
+        <li><a href="../generes.php">Geners</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="../login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>';
+    }
+
+}
 }
 ?>

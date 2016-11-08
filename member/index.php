@@ -3,11 +3,13 @@ require('../config.php');
 include($CLASS_MEMBER);
 $member=new member;
 
-if(isset($_GET['id'])) {
-  $id=$_GET['id'];
+$loggedin=$member->isLoggedIn();
+
+
+  $id=$_SESSION['lib'][0];
   $getname=$member->fetchByField ('User_Fname','user','User_Id',$id);
   $name=$getname['User_Fname'];
-}
+
 $borrow_data=$member->fetchBorrow($id);
 
 if(isset($_GET['return'])) {
@@ -34,13 +36,16 @@ if(isset($_GET['return'])) {
     <div>
       <ul class="nav navbar-nav">
         <li><a href="../index.php">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
+        <li><a href="../titles.php">Titles</a></li>
+        <li><a href="../authors.php">Authors</a></li> 
+        <li><a href="../publishers.php">Publishers</a></li>
+        <li><a href="../generes.php">Geners</a></li> 
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-book"></span> Add Book</a></li>
-        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      <?php if (isset($_SESSION['lib'])) { 
+            echo '<li><a href="../redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
+            else echo '<li><a href="../login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
       </ul>
     </div>
   </div>
@@ -51,6 +56,16 @@ if(isset($_GET['return'])) {
 <!-- --------------------END OF HEADER ----------------------------------- !-->
 
     <div class="container">
+
+    <?php if ($loggedin==0) {
+      echo'<div id="legend">
+      <legend class="ctitle">Please Login as Member</legend>
+      </div><div></div><div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>'; 
+    die();
+    } ?>
+
     <div id="legend">
       <legend class="ctitle"><?php echo 'Welcome '.$name; ?></legend>
       </div> 
@@ -100,7 +115,9 @@ if(isset($_GET['return'])) {
 </div>
 
     </div>
+    </div> 
+    <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
     </div>
-    <br/><br/><br/><br/>
   </body>
   </html>

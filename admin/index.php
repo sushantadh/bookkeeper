@@ -12,6 +12,8 @@ $users=$admin->fetchUsers();
 if(isset($_GET['return'])) {
   $return=$_GET['return'];
 }
+
+$loggedin=$admin->isLoggedIn();
 ?>
 
 
@@ -30,23 +32,7 @@ if(isset($_GET['return'])) {
 
   <body>
     <div class="page-header myhead"><Center>ONLINE LIBRARY</Center></div>
-
-    <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div>
-      <ul class="nav navbar-nav">
-        <li><a href="../index.php">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Add User</a></li>
-        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <?php $admin->nav();?>
     <div class="img-head"> 
       <img class="img-responsive" src="../assets/head.jpg">
     </div>
@@ -54,6 +40,15 @@ if(isset($_GET['return'])) {
 
     <div class="container">
     
+    <?php if ($loggedin==0) {
+      echo'<div id="legend">
+      <legend class="ctitle">Please Login as Admin</legend>
+      </div><div></div><div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>'; 
+    die();
+    }
+    ?>
       <div class="col-sm-4">
       <div class="container">
     <div id="legend">
@@ -109,11 +104,8 @@ if(isset($_GET['return'])) {
 
   </div>
 </div>
-
-
-      </div>
-      </div>
-  
-
+<div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
   </body>
   </html>

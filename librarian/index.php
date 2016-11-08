@@ -3,8 +3,10 @@ require('../config.php');
 include($CLASS_LIBRARIAN);
 $librarian=new Librarian;
 
+$loggedin=$librarian->isLoggedIn();
+
 $id=$_SESSION['lib'][0];
-  $getname=$admin->fetchByField ('User_Fname','user','User_Id',$id);
+  $getname=$librarian->fetchByField ('User_Fname','user','User_Id',$id);
   $name=$getname['User_Fname'];
   
 $requests=$librarian->fetchRequests();
@@ -33,28 +35,21 @@ if(isset($_GET['return'])) {
   <body>
     <div class="page-header myhead"><Center>ONLINE LIBRARY</Center></div>
 
-    <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div>
-      <ul class="nav navbar-nav">
-        <li><a href="../index.php">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li> 
-        <li><a href="#">Page 3</a></li> 
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-book"></span> Add Book</a></li>
-        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-    <div class="img-head"> 
+    <?php $librarian->nav(); ?>
+      <div class="img-head"> 
       <img class="img-responsive" src="../assets/head.jpg">
     </div>
 <!-- --------------------END OF HEADER ----------------------------------- !-->
 
     <div class="container">
+      <?php if ($loggedin==0) {
+      echo'<div id="legend">
+      <legend class="ctitle">Please Login as Librarian</legend>
+      </div><div></div><div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>'; 
+    die();
+    } ?>
     <div id="legend">
       <legend class="ctitle"><?php echo 'Welcome '.$name; ?></legend>
       </div> 
@@ -114,7 +109,7 @@ if(isset($_GET['return'])) {
       <td>'.$item['R_User'].'</td> 
       <td>'.$item['User_Fname'] .'</td>
       <td>'.$item['Book_Title'].'</td>
-      <td> <a href="../librarian/returnBook.php?rid='.$item['Return_Id'].'&uid='.$item['R_User'].'&bid='.$item['R_Book'].'&id='.$id.'"><button type="button" class="btn btn-default btn-md">Return Book</button></a></td>
+      <td> <a href="../librarian/issueBook.php?rid='.$item['Request_Id'].'&uid='.$item['R_User'].'&bid='.$item['R_Book'].'&id='.$id.'"><button type="button" class="btn btn-default btn-md">Issue Book</button></a></td>
       </tr>';
     }
   }
@@ -160,6 +155,8 @@ if(isset($_GET['return'])) {
 
     </div>
     </div>
-    <br/><br/><br/><br/>
+    <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
   </body>
   </html>
