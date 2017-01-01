@@ -28,9 +28,12 @@ class Functions {
 
 	        if (($ext=='jpg'||$ext=='jpeg'||$ext=='png'||$ext=='gif'||$ext=='bmp')and $size<$max_size and ($type=='image/jpeg' or $type=='image/png' or $type=='image/gif'))
 	        {
-	        $location='http://localhost/library/assets/cover/';
+	        $root=$_SERVER['DOCUMENT_ROOT'];	        	
+	        $cover='/library/assets/cover/';
+	        $location=$root.$cover;
+	        $url='http://localhost';
 	       	move_uploaded_file($temp_name,$location.$name);
-	        return $location.$name;
+	        return $url.$cover.$name;
 	        }
 	        
 	    else

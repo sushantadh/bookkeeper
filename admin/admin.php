@@ -26,8 +26,10 @@ class LibAdmin {
                         else
                            {
                              $password_hash=md5($password);
+                             $date=time();
+                             $new_date=(int)$date+(365*24*60*60);
                             
-                            $query=$pdo->prepare("INSERT INTO user VALUES ('','$f_name','$l_name','$email','$password_hash','$utype','')");
+                            $query=$pdo->prepare("INSERT INTO user VALUES ('','$f_name','$l_name','$email','$password_hash','$date','$new_date','$utype','')");
                             if ($query->execute()) {
                             return 0;	 
                         } 
@@ -71,7 +73,7 @@ class LibAdmin {
   public function fetchUsers() {
     global $pdo;
         
-            $query=$pdo->prepare("SELECT  User_Id, User_Fname,User_Lname,User_Email,User_Type FROM user");
+            $query=$pdo->prepare("SELECT  User_Id, User_Fname,User_Lname,User_Email,Reg_Date,Valid_Date,User_Type FROM user");
             if($query->execute()) {
                 $item=$query->fetchAll();
                 if ($item) {
@@ -92,7 +94,61 @@ class LibAdmin {
                     return 1;
                 }
             }
-      } 
+      }
+
+  public function fetchRequests() {
+    global $pdo;
+    $sql = "SELECT  User_Id,User_Fname,User_Lname, User_Email, Req_Date FROM user_req ORDER BY Req_Date ASC";
+     $query=$pdo->prepare($sql);
+
+     if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1; //no item
+                }
+            } 
+          }
+
+  public function deleteFromRequest($Id) {
+     global $pdo;
+        if(!empty($Id)) {
+            $query=$pdo->prepare("DELETE FROM user_req WHERE  User_Id='$Id'");
+            if($query->execute()) {
+                return 0;
+                } else {
+                    return 1;
+                }
+            }
+  }
+
+
+
+    public function approveRequest($Id) {
+      global $pdo;
+
+      $item=$this->fetchByField ('*','user_req','User_Id',$Id);
+      if ($item==1){
+        return $item;
+      }
+      else {
+        $f_name=$item['User_Fname'];
+        $l_name=$item['User_Lname'];
+        $email=$item['User_Email'];
+        $password=$item['User_Password'];
+        $utype=$item['User_Type'];
+
+        $approve=$this->addUser($f_name,$l_name,$email,$password,$password,$utype);
+
+        if($approve==0) {
+          $delete=$this->deleteFromRequest($Id);
+        }
+
+        return $approve;
+      }
+    }
+
   
   public function nav() {
     if($this->isLoggedIn()==1) {

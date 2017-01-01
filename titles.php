@@ -21,10 +21,10 @@ $item=$catalog->fetchField("Book_Id,Book_Title",'book');
 
 		<nav class="navbar navbar-default">
   <div class="container-fluid">
-   <div>
+    <div>
       <ul class="nav navbar-nav">
         <li><a href="index.php">Home</a></li>
-        <li class="active"><a href="titles.php">Titles</a></li>
+        <li><a href="titles.php">Titles</a></li>
         <li><a href="authors.php">Authors</a></li> 
         <li><a href="publishers.php">Publishers</a></li>
         <li><a href="generes.php">Geners</a></li> 
@@ -33,11 +33,13 @@ $item=$catalog->fetchField("Book_Id,Book_Title",'book');
       <?php if (isset($_SESSION['lib'])) { 
             echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
-            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Signup</a></li>'; ?>
       </ul>
     </div>
   </div>
 </nav>
+
 		<div class="img-head"> 
 			<img class="img-responsive" src="assets/head.jpg">
 		</div>

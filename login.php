@@ -52,7 +52,8 @@ include($CLASS_FUNCTIONS);
       <?php if (isset($_SESSION['lib'])) { 
             echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
-            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            	<li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Signup</a></li>'; ?>
       </ul>
     </div>
   </div>
@@ -107,8 +108,10 @@ include($CLASS_FUNCTIONS);
   </div>
 </form>
     </div>
-      <div class="col-sm-4">
-      </div>
+      
+    </div>
+  <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
     </div>
   </body>
   </html>

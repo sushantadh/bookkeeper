@@ -1,20 +1,21 @@
 <?php
-  include ('admin.php');
-  $admin=new LibAdmin;
+require_once('config.php'); 
+include($CLASS_MEMBER);
 
-  $isLoggedIn=$admin->isLoggedIn();
+$member=new Member;
+  $isLoggedIn=$member->isLoggedIn();
 
 
-  if(isset($_POST['FName'])&&isset($_POST['LName'])&&isset($_POST['e-mail'])&&isset($_POST['pswd'])&&isset($_POST['pswd_again'])&&isset($_POST['utype']))
+  if(isset($_POST['FName'])&&isset($_POST['LName'])&&isset($_POST['e-mail'])&&isset($_POST['pswd'])&&isset($_POST['pswd_again']))
     {
        $f_name=$_POST['FName'];
        $l_name=$_POST['LName'];
        $email=$_POST['e-mail'];
        $pswd=$_POST['pswd'];
        $pswd_again=$_POST['pswd_again'];
-       $utype=$_POST['utype'];
 
-       $result=$admin->addUser($f_name,$l_name,$email,$pswd,$pswd_again,$utype);
+
+       $result=$member->reqMembership($f_name,$l_name,$email,$pswd,$pswd_again);
   }
   else {
     $result=4;
@@ -28,32 +29,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheet/style.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheet/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </head>
 
   <body>
     <div class="page-header myhead"><Center>ONLINE LIBRARY</Center></div>
-    <?php $admin->nav();?>
+    
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="index.php">Home</a></li>
+        <li><a href="titles.php">Titles</a></li>
+        <li><a href="authors.php">Authors</a></li> 
+        <li><a href="publishers.php">Publishers</a></li>
+        <li><a href="generes.php">Geners</a></li> 
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      <?php if (isset($_SESSION['lib'])) { 
+            echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Signup</a></li>'; ?>
+      </ul>
+    </div>
+  </div>
+</nav>
     <div class="img-head"> 
-      <img class="img-responsive" src="../assets/head.jpg">
+      <img class="img-responsive" src="assets/head.jpg">
     </div>
 <!-- --------------------END OF HEADER ----------------------------------- !-->
 <?php
- if($isLoggedIn==0) {
+ if($isLoggedIn==1) {
     echo '<div class="container">
     <div id="legend">
-      <legend class="ctitle">Please sign in as admin</legend>
+      <legend class="ctitle">Please sign out first</legend>
       </div></div></body></html>';
       die();
  }
 ?>
 
     <div class="container">
-    <!-- <div class="ctitle">USER SIGN UP</div>  -->
     <div id="legend">
-      <legend class="ctitle">REGISTER A USER</legend>
+      <legend class="ctitle">Sign Up</legend>
       </div>
       <div class="col-sm-8">
         <br>
@@ -63,7 +83,7 @@
         if(isset($result) and $result==0) {
           echo '<div class="alert alert-success fade in" >
         <a href="#" class="close" data-dismiss="alert" aria-lebel="close">&times;</a>
-          <strong><span class="glyphicon glyphicon-ok-sign"></span>User added successfully!</strong> </div>" '; }
+          <strong><span class="glyphicon glyphicon-ok-sign"></span>Regestration Requested!</strong> </div>" '; }
 
       else if (isset($result) and $result==1) {
           echo '<div class="alert alert-warning fade in">
@@ -125,16 +145,7 @@
     </div>
   </div>
 
-  <div class="form-group">
-      <label class="control-label col-sm-2" for="utype">User Type</label> 
 
- <div class="col-sm-10">
-  <select class="form-control" id="user_type" name="utype">
-    <option value="1">Amin</option>
-    <option value="2">Librarian</option>
-  </select>
-</div>
-</div>
   <div class="form-group"> 
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-success">Register</button>

@@ -69,33 +69,15 @@ class Librarian {
           }
     }
 
-  private function checkMaxCount($bookId) {
-    global $pdo;
-
-          if(!empty($bookId)) {
-              $query=$pdo->prepare("SELECT Max_Avilable FROM book WHERE Book_Id='$bookId'");
-              if($query->execute()) {
-                  $item=$query->fetch();
-                   if ($item) {
-                      return $item['Max_Avilable'];
-                  } else {
-                      echo '<br>error - no max count';
-                  }
-              }
-          } else {
-               echo '<br>error - max count query';
-          }
-    }
-
   private function removeRequest($requestId) {
     global $pdo;
 
           if(!empty($requestId)) {
               $query=$pdo->prepare("DELETE FROM book_request WHERE Request_Id='$requestId'");
               if($query->execute()) {
-                  echo '<br>deleted from request table';
+                  return 0;
                   } else {
-                      echo '<br>error - detele from rquest query';
+                      return 1;
                   }
               }
             }
@@ -113,9 +95,9 @@ class Librarian {
               }
             }
 
-  private function grantRequest($userId,$bookId,$timeStamp) {
+  private function grantRequest($userId,$bookId,$bdate,$ddate) {
     global $pdo;
-    $query=$pdo->prepare("INSERT INTO book_borrowed VALUES ('','$userId','$bookId','$timeStamp')");
+    $query=$pdo->prepare("INSERT INTO book_borrowed VALUES ('','$userId','$bookId','$bdate','$ddate')");
           
     if ($query->execute()) {
       echo'request granted';  
@@ -139,6 +121,24 @@ class Librarian {
         print_r($query->errorInfo());
       }
     }
+
+    private function checkMaxCount($bookId) {
+      global $pdo;
+      if(!empty($bookId)) {
+              $query=$pdo->prepare("SELECT Max_Avilable FROM book WHERE Book_Id='$bookId'");
+              if($query->execute()) {
+                  $item=$query->fetch();
+                   if ($item) {
+                      return $item['Max_Avilable'];
+                  } else {
+                      echo '<br>error - no max count';
+                  }
+              }
+          } else {
+               echo '<br>error - max count query';
+          }
+
+      }
 
   private function getBorrowCount($userId) {
     global $pdo;
@@ -171,14 +171,8 @@ class Librarian {
       }
     }
 
-  public function issueBook($requestId,$userId,$bookId) {
-    $bookCount=$this->checkBookCount($bookId);
-    // echo '<br>Book count '. $bookCount;
-        
-    if($bookCount<=0) {
-      // echo 'Book not avilable';
-      return 1;
-      $borrowCount=$this->getBorrowCount($userId);
+  public function denyRequest($requestId,$userId) {
+    $borrowCount=$this->getBorrowCount($userId);
 
       $newBorrowCount=(int)$borrowCount-1;
       if ($newBorrowCount<0) {
@@ -187,13 +181,25 @@ class Librarian {
 
       $decBorrow=$this->decreaseBorrowCount($userId, $newBorrowCount); 
       $removeRequest=$this->removeRequest($requestId);
+      return 0;
+  }
+
+  public function issueBook($requestId,$userId,$bookId) {
+    $bookCount=$this->checkBookCount($bookId);
+    // echo '<br>Book count '. $bookCount;
+        
+    if($bookCount<=0) {
+      // echo 'Book not avilable';
+      $deny=$this->denyRequest($requestId,$userId);      
+      return 1;
     } 
 
     else {
         $removeRequest=$this->removeRequest($requestId);
-        $timeStamp=time();
+        $bdate=time();
+        $ddate=(int)$bdate+(15*24*60*60);
         
-        $grantRequest=$this->grantRequest($userId,$bookId,$timeStamp);
+        $grantRequest=$this->grantRequest($userId,$bookId,$bdate,$ddate);
         $newBookCount=(int)$bookCount-1;
         if($newBookCount<0) {
           $newBookCount=0;
@@ -241,7 +247,7 @@ class Librarian {
 
   public function fetchRequests() {
     global $pdo;
-    $sql = "SELECT BR.Request_Id,BR.R_User,BR.R_Book,B.Book_Title,U.User_Fname FROM book_request BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Requested_Date ASC";
+    $sql = "SELECT BR.Request_Id,BR.R_User,BR.R_Book,BR.Requested_Date,B.Book_Title,B.Book_Count,U.User_Fname FROM book_request BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Requested_Date ASC";
      $query=$pdo->prepare($sql);
 
      if($query->execute()) {
@@ -256,7 +262,7 @@ class Librarian {
 
   public function fetchReturn() {
     global $pdo;
-    $sql = "SELECT BR.Return_Id,BR.R_User,BR.R_Book,B.Book_Title,U.User_Fname FROM book_return BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Return_Date ASC";
+    $sql = "SELECT BR.Return_Id,BR.R_User,BR.R_Book,BR.Return_Date,B.Book_Title,U.User_Fname FROM book_return BR,book B,user U WHERE BR.R_Book=B.Book_Id AND BR.R_User=U.User_Id ORDER BY BR.Return_Date ASC";
      $query=$pdo->prepare($sql);
 
      if($query->execute()) {
@@ -268,6 +274,35 @@ class Librarian {
                 }
             } 
           }
+
+  public function fetchBooks() {
+    global $pdo;
+    $sql = "SELECT * FROM book ORDER BY Date_Added DESC";
+     $query=$pdo->prepare($sql);
+
+     if($query->execute()) {
+                $item=$query->fetchAll();
+                if ($item) {
+                    return $item;
+                } else {
+                    return 1; //no item
+                }
+            } 
+  }
+
+
+  public function deleteBook($Id) {
+    global $pdo;
+
+          if(!empty($Id)) {
+              $query=$pdo->prepare("DELETE FROM book WHERE Book_Id='$Id'");
+              if($query->execute()) {
+                  return 0;
+                  } else {
+                      return 1;
+                  }
+              }
+            }
 
   public function nav() {
     if($this->isLoggedIn()==1) {

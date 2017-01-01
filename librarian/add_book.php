@@ -25,8 +25,7 @@ include($CLASS_FUNCTIONS);
       $size = $_FILES['file']['size'];
 
       $upload=$Function->uploadCover($name,$size,$type,$temp_name,$ext,$max_size);
-      echo 'upload status: '.$upload;
-      
+        
       if ($upload==2) {
         $result=2;
       }

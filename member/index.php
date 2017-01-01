@@ -88,6 +88,8 @@ if(isset($_GET['return'])) {
     <thead>
         <tr>
         <th>Book Title</th>
+        <th>Borrowed Date</th>
+        <th>Due Date</th>
         <th>Return Request</th>
       </tr>
     </thead>
@@ -100,6 +102,8 @@ if(isset($_GET['return'])) {
     foreach($borrow_data as $item) {
       echo'<tr>
       <td>'.$item['Book_Title'].'</td>
+      <td>'.date('M jS Y',$item['Borrowed_Date']).'</td>
+      <td>'.date('M jS Y',$item['Due_Date']).'</td>
       <td> <a href="returnRequest.php?brid='.$item['Borrow_Id'].'&uid='.$item['B_User'].'&bid='.$item['B_Book'].'&id='.$id.'"><button type="button" class="btn btn-default btn-md">Return Book</button></a></td>
       </tr>';
     }

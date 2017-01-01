@@ -23,7 +23,7 @@ $item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added',
   <div class="container-fluid">
     <div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="titles.php">Titles</a></li>
         <li><a href="authors.php">Authors</a></li> 
         <li><a href="publishers.php">Publishers</a></li>
@@ -31,13 +31,15 @@ $item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added',
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <?php if (isset($_SESSION['lib'])) { 
-      			echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
+            echo '<li><a href="redirect.php"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';} 
-      			else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>'; ?>
+            else echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Signup</a></li>'; ?>
       </ul>
     </div>
   </div>
 </nav>
+
 		<div class="img-head"> 
 			<img class="img-responsive" src="assets/head.jpg">
 		</div>
@@ -55,6 +57,10 @@ $item=$catalog->fetchLatest('Book_Id,Book_Cover,Book_Title','book','Date_Added',
       </div>';
       ?>
       </div>
-	</body>
+      </div>
+	    <div class="panel panel-default">
+  <div class="panel-body"> <center>Onine Library &copy; 2016 </center></div>
+    </div>
+  </body>
 
 </html>

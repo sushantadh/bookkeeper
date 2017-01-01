@@ -128,7 +128,7 @@ class Member {
 
   public function fetchBorrow($id) {
     global $pdo;
-    $sql = "SELECT BR.Borrow_Id,BR.B_User,BR.B_Book,B.Book_Title FROM book_borrowed BR,book B WHERE BR.B_Book=B.Book_Id AND BR.B_User='$id'";
+    $sql = "SELECT BR.Borrow_Id,BR.B_User,BR.B_Book,BR.Borrowed_Date,BR.Due_Date,B.Book_Title FROM book_borrowed BR,book B WHERE BR.B_Book=B.Book_Id AND BR.B_User='$id'";
      $query=$pdo->prepare($sql);
 
      if($query->execute()) {
@@ -140,6 +140,44 @@ class Member {
                 }
             } 
           }
+
+  public function reqMembership($f_name,$l_name,$email,$password,$pass_again) {
+    global $pdo;
+
+    if(!empty($email)&&!empty($password)&&!empty($pass_again)&&!empty($f_name)&&!empty($l_name)) {
+      
+      if($password!=$pass_again)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        $query=$pdo->prepare("SELECT count(*) FROM user WHERE User_Email='$email'");
+                        $query->execute();
+                        
+                        if($query->fetchColumn())
+                           {
+                               return 2;
+                           }
+                        else
+                           {
+                             $password_hash=md5($password);
+                             $utype=3;
+                             $date=time();
+                            
+                            $query=$pdo->prepare("INSERT INTO user_req VALUES ('','$f_name','$l_name','$email','$password_hash','$utype','$date')");
+                            if ($query->execute()) {
+                            return 0;  
+                        } 
+                        else {
+                          print_r($query->errorInfo());
+                        }
+           
+                            
+                
+                           }
+                    }
+    } }
 
 
   }
